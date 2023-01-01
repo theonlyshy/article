@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include<Windows.h>
-
+//文章班级管理
 #define MAX 80
 typedef struct line
 {
