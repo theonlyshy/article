@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include<Windows.h>
-//文章班级管理系统
+
 #define MAX 80
 typedef struct line
 {
@@ -44,7 +44,7 @@ void Delete(node* s);
 // 修改用户信息
 void Fix(node *L);
 
-//插叙用户
+
 // 查询用户信息
 void Search_Printf(node* L);
 node* Search_id(int id, node* L);// 按用户名进行查找
@@ -166,7 +166,53 @@ int mangerchoice()
 	}
 	return 0;
 }
-
+int userchoice()
+{
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 1:
+			system("cls");
+			printf("\n\t\t|>>>                添加文章               <<<|\n\n");
+			Input();
+			break;
+		case 2:
+			system("cls");
+			printf("\n\t\t|>>>                删除文章               <<<|\n\n");
+			del();
+			break;
+		case 3:
+			system("cls");
+			printf("\n\t\t|>>>                编辑文章               <<<|\n\n");
+			Edit();
+			break;
+		case 4:
+			system("cls");
+			printf("\n\t\t|>>>                查找文章               <<<|\n\n");
+			Search();
+			break;
+		case 5:
+			system("cls");
+			printf("\n\t\t|>>>                保存文章               <<<|\n\n");
+			Save();
+			break;
+		case 6:
+			system("cls");
+			printf("\n\t\t|》》》        已退出用户系统！            《《《|\n");
+			Sleep(1500);
+			system("cls");
+			main();
+			break;
+		default:
+			printf("\t\t输入范围错误，请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			usermenu();
+			userchoice();
+			break;
+	}
+	return 0;
+}
 int usermenu()
 {
 	system("cls");
