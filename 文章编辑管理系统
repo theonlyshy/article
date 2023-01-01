@@ -44,7 +44,7 @@ void Delete(node* s);
 // 修改用户信息
 void Fix(node *L);
 
-
+//插叙用户
 // 查询用户信息
 void Search_Printf(node* L);
 node* Search_id(int id, node* L);// 按用户名进行查找
