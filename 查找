@@ -1,0 +1,57 @@
+int searchALL()
+{
+	int English=0;//英文字母数目 
+	int Blank=0;//空格数目 
+	int Number=0;//数字数目
+	int All=0;//总数目
+	unsigned int i=0;
+	LINE *p = first;
+	//首先输出原文章
+	printf("\n|>>>                【原文章】               <<<|\n");
+	while(p != last) //当p所指向的不是最后一行时，循环输出 
+	{
+		printf("\n\n第%d行%s",p->num,p->str); //输出行号和字符串
+		unsigned int j=0;
+		while(j<strlen(p->str))
+	{
+		if(isdigit(p->str[j]))
+		{
+			Number++;
+		}
+		else if(p->str[j]==32) 
+		{
+			Blank++;
+		}
+		else if(isupper(p->str[j])||islower(p->str[j])) 
+		{
+			English++;
+		}
+			j++;
+	}
+		p = p->next;//p指向下一行 
+	}
+	printf("\n\n第%d行|%s\n",last->num,last->str); //当p所指向最后一行时，输出最后一行内容 
+	while(i<strlen(last->str))
+	{
+		if(isdigit(last->str[i]))
+		{
+			Number++;
+		}
+		else if(last->str[i]==32) 
+		{
+			Blank++;
+		}
+		else if(isupper(last->str[i])||islower(last->str[i])) 
+		{
+			English++;
+		}
+			i++;
+	}
+	All=English+Blank+Number;
+	printf("\n"); 
+	printf("文本中的字母个数为：%d\n",English);
+	printf("文本中的空格个数为：%d\n",Blank);
+	printf("文本中的数字个数为：%d\n",Number);
+	printf("文本中的总字数为：%d\n",All);
+	return 0;
+}

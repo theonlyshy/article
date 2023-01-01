@@ -1,0 +1,46 @@
+int Edit()
+{
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 编辑文章菜单 】                |\n");
+	printf("\t\t|                   1.删除一行文本                  |\n");
+	printf("\t\t|                   2.删除特定字符                  |\n");
+	printf("\t\t|                   3.添加一行文本                  |\n");
+	printf("\t\t|                   4.添加特定字符                  |\n");
+	printf("\t\t|                   5.移动一行文本                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 0:
+			system("cls");
+			usermenu();
+			userchoice(); 
+			break;
+		case 1:
+			deleteLine();
+			break;
+		case 2:
+			deleteWord();
+			break;
+		case 3:
+			insertLine();
+			break;
+		case 4:
+			insertWord();
+			break;
+		case 5:
+			menu_move();
+			printf("\t\t移动过后的文章为：\n");
+			Output();
+			break;
+		default:
+			printf("输入错误！请重新输入");
+			Sleep(1000);
+			system("cls");
+			Edit();
+			break;
+	}
+	return 0;
+}

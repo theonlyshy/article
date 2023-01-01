@@ -6,9 +6,8 @@ typedef struct Node
 {
 	int ID;// 用户名 
 	char Sex[10];// 性别
-    int Num;// 文章数 
 	char Name[50];// 文章名 
-
+    char password[10];//密码 
 	struct Node* next;// 指针域
 }node;
 
@@ -19,6 +18,11 @@ int Read_FILE(node* L);
 
 // 保存文件
 int  Save_FILE(node* L);
+
+//登录界面 
+void register();
+void entering();
+int password_check(int id,char *password,node* L);
 
 // 主菜单界面
 void managermenu();
@@ -52,6 +56,8 @@ int main()
 	Read_FILE(&list);
 	while (true)
 	{
+		register(); 
+		entering();
 		managermenu();
 		scanf("%d", &choice);
 		switch (choice)
@@ -110,7 +116,7 @@ int Read_FILE(node* L)
 		return 0;
 	}
 
-	while (fscanf(pfRead, "%d %s %d %s", &user.ID, user.Sex, &user.Num, user.Name) != EOF)
+	while (fscanf(pfRead, "%d %s %s %s", &user.ID, user.Sex, user.Name, user.password) != EOF)
 	{
 		s = (node*)malloc(sizeof(node));
 
@@ -138,7 +144,7 @@ int  Save_FILE(node* L)
 
 	while (p != NULL)
 	{
-		fprintf(pfWrite, " %d %s %d %s\n", p->ID, p->Sex, p->Num, p->Name);
+		fprintf(pfWrite, " %d %s %s %s\n", p->ID, p->Sex, p->Name, p->password);
 		p = p->next;
 	}
 
@@ -155,8 +161,6 @@ void Add_Printf()
 	scanf("%d", &user.ID);
 	printf("性别：");
 	scanf("%s", user.Sex);
-	printf("文章数：");
-	scanf("%d", user.Num);
 	printf("文章名：");
 	scanf("%s", user.Name);
 	Add(&list, user);
@@ -196,9 +200,9 @@ void Delete_Printf(node* L)
 
 	user = user->next;
 	printf("________________________________________________________________\n");
-	printf("|用户名\t|性别\t|文章数\t|文章名\t|\n");
+	printf("|用户名\t|性别\t|文章名\t|\n");
 	printf("________________________________________________________________\n");
-	printf("|%d\t|%s\t|%d\t|%s\t|\n", user->ID, user->Sex, user->Num, user->Name);
+	printf("|%d\t|%s\t|%s\t|\n", user->ID, user->Sex, user->Name);
 	printf("________________________________________________________________\n");
 
 	Delete(p);
@@ -239,15 +243,14 @@ void Fix(node* L)
 
 	// 输出一次所要修改的用户信息 
 		printf("________________________________________________________________\n");
-		printf("|用户名\t|性别\t|文章数\t|文章名\t|\n");
+		printf("|用户名\t|性别\t|文章名\t|\n");
 		printf("________________________________________________________________\n");
-		printf("|%d\t|%s\t|%d\t|%s\t|\n", user->ID, user->Sex, user->Num, user->Name);
+		printf("|%d\t|%s\t|%s\t|\n", user->ID, user->Sex, user->Name);
 		printf("________________________________________________________________\n");
 
 		printf("修改用户名 ---- 1\n");
 		printf("修改性别 ---- 2\n");
-		printf("修改文章数 ---- 3\n");
-		printf("修改文章名 ---- 4\n");
+		printf("修改文章名 ---- 3\n");
 
 		printf("请输入要修改的信息：");
 		scanf("%d", &choice);
@@ -263,10 +266,6 @@ void Fix(node* L)
 			scanf("%s", user->Sex);
 			break;
 		case 3:
-			printf("请输入文章数：");
-			scanf("%d", user->Num);
-			break; 
-		case 4:
 			printf("请输入文章名：");
 			scanf("%s", user->Name);
 			break;
@@ -281,9 +280,9 @@ void Fix(node* L)
 
 	// 修改完成后该用户的信息
 	printf("________________________________________________________________\n");
-	printf("|用户名\t|性别\t|文章数\t|文章名\t|\n");
+	printf("|用户名\t|性别\t|文章名\t|\n");
 	printf("________________________________________________________________\n");
-	printf("|%d\t|%s\t|%d\t|%s\t|\n", user->ID, user->Sex, user->Num, user->Name);
+	printf("|%d\t|%s\t|%s\t|\n", user->ID, user->Sex, user->Name);
 	printf("________________________________________________________________\n");
 
 	// 保存信息
@@ -316,9 +315,9 @@ void Search_Printf(node* L){
 		{
 		user = user->next;
 			printf("________________________________________________________________\n");
-			printf("|用户名\t|性别\t|文章数\t|文章名\t|\n");
+			printf("|用户名\t|性别\t|文章名\t|\n");
 			printf("________________________________________________________________\n");
-			printf("|%d\t|%s\t|%d\t|%s\t|\n", user->ID, user->Sex, user->Num, user->Name);
+			printf("|%d\t|%s\t|%s\t|\n", user->ID, user->Sex, user->Name);
 			printf("________________________________________________________________\n");
 		}
 	}
@@ -336,9 +335,9 @@ void Search_Printf(node* L){
 		{
 			user = user->next;
 			printf("________________________________________________________________\n");
-			printf("|用户名\t|性别\t|文章数\t|文章名\t|\n");
+			printf("|用户名\t|性别\t|文章名\t|\n");
 			printf("________________________________________________________________\n");
-			printf("|%d\t|%s\t|%d\t|%s\t|\n", user->ID, user->Sex, user->Num, user->Name);
+			printf("|%d\t|%s\t|%s\t|\n", user->ID, user->Sex, user->Name);
 			printf("________________________________________________________________\n");
 		}
 	}
@@ -387,7 +386,7 @@ void Print(node* L)
 		while (p != NULL)
 		{
 			printf("________________________________________________________________\n");
-			printf("|%d\t|%s\t|%d\t|%s\t|\n", p->ID, p->Sex, p->Num, p->Name);
+			printf("|%d\t|%s\t|%s\t|\n", p->ID, p->Sex, p->Name);
 			printf("________________________________________________________________\n");
 			p = p->next;
 		}
@@ -397,10 +396,58 @@ void Print(node* L)
 void Print_Printf()
 {
 	printf("________________________________________________________________\n");
-	printf("|用户名\t|性别\t|文章数\t|文章名\t|\n");
+	printf("|用户名\t|性别\t|文章名\t|\n");
 	printf("________________________________________________________________\n");
 }
+void register(){
+	int id;
+	char password[10] ;
+	printf("请输入用户名：");
+	scanf("%d", id);
+    node* user = Search_id(id, L);
 
+	if (user != NULL)
+	{
+		printf("此用户已被注册，请重新注册！\n");
+		return;
+	}
+	printf("请输入用户密码：");
+	scanf("%s", user.password);
+	printf("请输入用户性别：");
+	scanf("%s", user.Sex);
+	printf("请输入用户要编辑的文章名：");
+	scanf("%s", user.Name);
+	Add(&list, user); 
+} 
+void entering(){
+	int id;
+	char password[10] ;
+	printf("请输入用户名：");
+	scanf("%d", id);
+	printf("请输入用户密码：");
+	scanf("%s", password);
+	password_check(id,password,L);
+}
+int password_check(int id,char *password,node* L){
+
+    user = Search_id(id, L);
+	if (user == NULL)
+	{
+	printf("此用户不存在,请重新注册！\n");
+	register();
+	}
+	node* p = L;
+	while (p->next != NULL)
+	{
+		if (p->next->password == password)
+		{
+			printf("密码正确，登陆成功！\n");
+		}
+		p = p->next;
+	}
+	printf("密码有误！\n");
+	return; 
+}
 
 
 

@@ -1,0 +1,246 @@
+int insertLine()//插入一行文本
+{
+	printf("\t\t原文本为：\n");
+	Output();
+	int linenum; 
+	printf("\n\t\t请输入插入位置的行号：");
+	scanf("%d", &linenum);
+	LINE * info, * q, * p;
+	p = first;
+	q = NULL;
+	while (p && p->num != linenum)               
+	{
+		q = p;				//插入行前面一行 
+		p = p->next;	   //插入行后面一行
+	}
+	if (p == NULL && (q->num + 1) != linenum)	//指定行不存在，不能插入
+	{
+		printf("\n\t\t输入的行号不存在！\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 添加字符 】               <<<|\n");
+		insertLine();
+	}
+	else // 指定行存在，进行插入
+	{
+		info = (LINE *)malloc(sizeof(LINE));
+		printf("\t\t请输入要插入的字符串:");
+		scanf("%s", info->str);
+		info->num = linenum;
+		if (linenum == 1)  			  //插入在第一行
+		{
+			info->next = p;
+			p->pre = info;
+			info->pre = NULL;
+			first = info;
+		}
+		else if (q->num != linenum)  //插入在最后一行
+		{
+			q->next = info;
+			info->next = p;
+			info->pre = q;
+		}
+		else     //插入在其他行
+		{
+			q->next = info;
+			info->next = p;
+			p->pre = info;
+			info->pre = q;
+		}
+		while (p)   //如果不是插入在最后一行，插入行后面的行号都加1
+		{
+			p->num = p->num + 1;
+			p = p->next;
+		}
+		printf("\n\t\t|》》》                添加成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 添加字符 】               <<<|\n\n");
+		printf("\t\t添加过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+}
+int insertWord()//添加特定字符
+{
+	printf("\t\t原文本为：\n");
+	Output(); 
+	char string[MAX]; //定义一个字符数组存放插入的字符串 
+	int linenum;  //行号 
+	int position; //列号 
+	printf("\n\t\t请输入插入位置的行号：");
+	scanf("%d", &linenum);
+	printf("\t\t请输入插入位置的列号：");
+	scanf("%d", &position);
+	position = (position*2)-1; 
+	printf("\t\t请输入要插入的字符串：");
+	scanf("%s", string);
+	LINE * info;
+	int len, i;
+	int lenth;
+	char rest_str[MAX],kongge[2] = { " " };
+	info = first;
+	while (info && info->num != linenum)   //查询要插入的行
+	{
+		info = info->next;
+	}
+	if (info == NULL)
+		printf("\n\t\t输入的行号不存在！\n");
+	else if (position < 0)
+		printf("\n\t\t输入的列号不存在！\n");
+	else    //如果行和列都存在，则进行插入
+	{
+		lenth = strlen(info->str);
+		//strlen()作用是计数器，从内存中的某个位置（可以是字符串开头、中间的某个位置、甚至是某个不确定的内存区域）
+		//开始扫描，直到碰到第一个字符串结束符'\0'为止，然后返回计数器值（长度不包括'\0'） 
+		if (lenth < position)	//插入列大于本行文件列数
+		{
+			len = position - lenth - 1;
+			for (i = 0; i < len; i++)
+			strcat(info->str, kongge);   //将空余的部分插入空格符
+			strcat(info->str, string);    //插入字符到列的未尾
+		}
+		else   //插入列在本行文字的中间
+		{
+			strcpy(rest_str, &info->str[position - 1]); //strcpy()字符串复制函数，同时也会复制字符串结束符 
+			strcpy(&info->str[position - 1], string);
+			strcat(info->str, rest_str);  //strcat()作用是在一个字符串末尾增加新的字符：将rest_str字符串拷贝到info->str的字符串末尾，info所指向的字符串要留有足够的空间来容纳要拷贝的字符串 
+		}
+		printf("\n\t\t|》》》                添加成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 添加字符 】               <<<|\n\n");
+		printf("添加过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+} 
+int deleteLine()//删除一行文本
+{
+	printf("\t\t原文本为：\n");
+	Output();
+	printf("\n\t\t请输入要删除行的行号：");
+	int linenum; 
+	scanf("%d",&linenum);
+	LINE * info, *p;
+	info = first;
+	while ((info->num < linenum) && info)  //寻找要删除的行 
+		info = info->next;
+	if (info == NULL)
+		printf("\n\t\t输入的行号不存在\n");
+	else
+	{
+		p = info->next;     //指向要删除的行后面一行 
+		if (first == info) //如果删除的是第一行
+		{
+			first = info->next;
+			if (first)  //如果删除后，不为空
+				first->pre = NULL;
+			else  //删除后为空
+				last = NULL;
+		}
+		else
+		{
+			info->pre->next = info->next;  //指定行的上一行指向指定行的下一行
+			if (info != last) //如果不是最后一行
+				info->next->pre = info->pre;  //修改其下一行的指向头的指针 
+			else  //如果是最后一行，修改尾指针
+				last = info->pre;
+		}
+		free(info);
+		while (p) //被删除行之后的行号减一 
+		{
+			p->num = p->num - 1;
+			p = p->next;
+		}
+		printf("\n\t\t|》》》                删除成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 删除字符 】               <<<|\n\n");
+		printf("\t\t删除过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+}
+int deleteWord()//删除特定字符 
+{
+	int linenum, position,lenth;  //行，列，删除长度 
+	printf("\t\t原文本为：\n");
+	Output();
+	printf("\t\t请输入要删除内容所在行，列，删除内容字节长度，中间用空格隔开\n");
+	scanf("%d %d %d",&linenum,&position,&lenth);
+	position = (position*2)-1;
+	getchar();
+	LINE *info=first;
+	char rest_str[MAX];
+	if(linenum == 1)
+	info = first;
+	else
+	for(int i=1;i<linenum;i++)     	 //让info指向删除内容所在行 
+	info = info->next;      
+	if (info == NULL)
+		printf("\n\t\t该行没有字符！\n");
+	else
+	{
+		if (strlen(info->str) <=(position + lenth))  //本行的字符长度<=待删除的列号+删除长度，直接在当前位置插入'\0'
+			info->str[position] = '\0';
+		else
+		{	int i;
+			for(i = position-1;info->str[i+lenth]!='\0';i++)
+			info->str[i]=info->str[i+lenth];
+			info->str[i]='\0';
+		}
+		printf("\n\t\t|》》》                删除成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 删除字符 】               <<<|\n\n");
+		printf("\t\t删除过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+}
+int Edit()
+{
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 编辑文章菜单 】                |\n");
+	printf("\t\t|                   1.删除一行文本                  |\n");
+	printf("\t\t|                   2.删除特定字符                  |\n");
+	printf("\t\t|                   3.添加一行文本                  |\n");
+	printf("\t\t|                   4.添加特定字符                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 0:
+			system("cls");
+			usermenu();
+			userchoice(); 
+			break;
+		case 1:
+			deleteLine();
+			break;
+		case 2:
+			deleteWord();
+			break;
+		case 3:
+			insertLine();
+			break;
+		case 4:
+			insertWord();
+			break;
+		default:
+			printf("输入错误！请重新输入");
+			Sleep(1000);
+			system("cls");
+			Edit();
+			break;
+	}
+	return 0;
+}
+

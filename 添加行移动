@@ -1,0 +1,122 @@
+int delete2(int line_num)
+{	
+	LINE * info, *p;
+	info = first;
+	while ((info->num < line_num) && info)  //寻找要删除的行 
+		info = info->next;
+	if (info == NULL)
+		printf("该行不存在");
+	else
+	{
+		p = info->next;     //指向要删除的行后面一行 
+		if (first == info) //如果删除的是第一行
+		{
+			first = info->next;
+			if (first)  //如果删除后，不为空
+				first->pre = NULL;
+			else  //删除后为空
+				last = NULL;
+		}
+		else
+		{
+			info->pre->next = info->next;  //指定行的上一行指向指定行的下一行
+			if (info != last) //如果不是最后一行
+				info->next->pre = info->pre;  //修改其下一行的指向头的指针 
+			else  //如果是最后一行，修改尾指针
+				last = info->pre;
+		}
+		free(info);
+		while (p) //被删除行之后的行号减一 
+		{
+			p->num = p->num - 1;
+			p = p->next;
+		}
+
+	}
+return 0;
+}
+
+int menu_move()
+{	
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 移动操作菜单 】                |\n");
+	printf("\t\t|                   1.向下移动一行                  |\n");
+	printf("\t\t|                   2.向上移动一行                  |\n");
+	printf("\t\t|                   3.返回上级菜单                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t原文本为：\n");
+	Output();
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice); 
+	int line_num,number;
+	char str[2];
+	switch (choice)
+			{
+			case 1:   // 向下移动一行
+				printf("\t\t输人要移动的字符串所在行号：");
+				scanf("%d", &line_num);
+				LINE *info,*p;                    //新建一行空行 
+				info = (LINE *)malloc(sizeof(LINE));
+				info->str[0] = ' ';
+				info->str[1] = '\0';
+				info->num = line_num;
+				if (line_num == 1)    //插入在首行
+				{	
+					info->next = first;
+					first->pre = info;
+					first = info;
+					first->pre = NULL;
+					p=first->next;
+				}
+				else  //插入在其他行
+		        {
+		       	p=first;
+		    	while(p->num != line_num)
+					p = p->next;                    //令p指向插入行 
+				info->next=p;
+				info->pre=p->pre;
+				p->pre->next=info;
+				p->pre = info;
+				}
+				while (p)   //插入行后面的行号都加1
+				{
+					p->num = p->num + 1;
+					p = p->next;
+				}
+				printf("\n\t\t|》》》                移动成功！             《《《|\n");
+				Sleep(1000);
+				system("cls");
+				printf("\n\t\t|>>>                【 移动文本 】               <<<|\n\n");
+				printf("\t\t移动过后的文本为：\n"); 
+				Output();
+				printf("\n");
+				break;
+			case 2:   //向上移动一行
+				printf("\t\t输入要移动的字符串所在行号：");
+				scanf("%d",&line_num);
+				delete2(line_num-1);
+				printf("\n\t\t|》》》                移动成功！             《《《|\n");
+				Sleep(1000);
+				system("cls");
+				printf("\n\t\t|>>>                【 移动文本 】               <<<|\n\n");
+				printf("\t\t移动过后的文本为：\n"); 
+				Output();
+				printf("\n");
+				break;
+			
+			case 3: //返回上级菜单
+				system("cls");
+				Edit();
+				break;
+			default:
+				printf("输入错误！请重新输入\n");
+				Sleep(1000);
+				system("cls");
+				menu_move();
+				break;
+				
+			} 
+return 0;
+	
+}

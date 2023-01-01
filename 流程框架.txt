@@ -1,0 +1,126 @@
+#include "art.h"
+
+int mangermenu()
+{
+	printf("\t\t****************************************************************\n");
+	printf("\t\t***********             管理员功能菜单             ***********\n");
+	printf("\t\t***********          1 ---- 增加用户信息             ***********\n");
+	printf("\t\t***********          2 ---- 删除用户信息             ***********\n");
+	printf("\t\t***********          3 ---- 修改用户信息             ***********\n");
+	printf("\t\t***********          4 ---- 查询用户信息             ***********\n");
+	printf("\t\t***********          5 ---- 输出用户信息             ***********\n");
+	printf("\t\t***********          6 ---- 退出管理系统             ***********\n");
+	printf("\t\t****************************************************************\n");
+
+	printf("\t\t请选择想要实现的功能（数字）：");
+	
+	return 0;
+}
+int mangerchoice()
+{
+	scanf("%d",&choice1);
+	switch(choice1)
+	{
+		case 1:
+			system("cls");
+			printf("\n\t\t|>>>                增加用户信息               <<<|\n\n");
+			break;
+		case 2:
+			system("cls");
+			printf("\n\t\t|>>>                删除用户信息              <<<|\n\n");
+			break;
+		case 3:
+			system("cls");
+			printf("\n\t\t|>>>                修改用户信息               <<<|\n\n");
+			break;
+		case 4:
+			system("cls");
+			printf("\n\t\t|>>>                查询用户信息               <<<|\n\n");
+			break;
+		case 5:
+			system("cls");
+			printf("\n\t\t|>>>                 输出用户信息              <<<|\n\n");
+			break;
+		case 6:
+			system("cls");
+			printf("\n\t\t|>>>               退出管理系统                <<<|\n\n");
+			break;
+		default:
+			printf("\t\t输入范围错误，请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			usermenu();
+			userchoice();
+			break;
+	}
+	return 0;
+}
+int userchoice()
+{
+	scanf("%d",&choice2);
+	switch(choice2)
+	{
+		case 1:
+			system("cls");
+			printf("\n\t\t|>>>                添加文章               <<<|\n\n");
+			break;
+		case 2:
+			system("cls");
+			printf("\n\t\t|>>>                删除文章               <<<|\n\n");
+			break;
+		case 3:
+			system("cls");
+			printf("\n\t\t|>>>                编辑文章               <<<|\n\n");
+			break;
+		case 4:
+			system("cls");
+			printf("\n\t\t|>>>                查找文章               <<<|\n\n");
+			break;
+		case 5:
+			system("cls");
+			exit(0);
+			break;
+		default:
+			printf("\t\t输入范围错误，请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			usermenu();
+			userchoice();
+			break;
+	}
+	return 0;
+}
+int usermenu()
+{
+	printf("\t\t****************************************************************\n");
+	printf("\t\t***********             用户功能菜单             ***********\n");
+	printf("\t\t***********          1 ---- 添加文章             ***********\n");
+	printf("\t\t***********          2 ---- 删除文章             ***********\n");
+	printf("\t\t***********          3 ---- 编辑文章             ***********\n");
+	printf("\t\t***********          4 ---- 查找文章             ***********\n");
+	printf("\t\t****************************************************************\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	return 0;
+}
+int main()
+{
+		head();
+		printf("\t\t1.管理员登录");
+		printf("\t\t2.用户登录\n");
+		system("pause"); 
+		printf("\t请输入你的选择： ");
+		scanf("%d",&choice);
+		system("cls");
+		if(choice==1){
+			mangermenu();
+			mangerchoice();
+			system("pause");
+			system("cls");
+		}
+		else if(choice==2){
+			usermenu();
+			userchoice();
+			system("pause");
+			system("cls");
+		}
+}
