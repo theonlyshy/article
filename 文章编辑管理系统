@@ -126,7 +126,6 @@ int mangermenu()
 int mangerchoice()
 {
 	int choice;
-	//Read_FILE(&list);
 	while (true)
 	{
 		scanf("%d", &choice);
