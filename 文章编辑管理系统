@@ -165,50 +165,46 @@ int mangerchoice()
 	}
 	return 0;
 }
-int userchoice()
+//管理员选择函数
+int mangerchoice()
 {
-	scanf("%d",&choice);
-	switch(choice)
+	int choice;
+	while (true)
 	{
-		case 1:
+		scanf("%d", &choice);
+		switch (choice)
+		{
+		case 0:// 返回登录界面 
 			system("cls");
-			printf("\n\t\t|>>>                添加文章               <<<|\n\n");
-			Input();
+			main(); 
 			break;
-		case 2:
-			system("cls");
-			printf("\n\t\t|>>>                删除文章               <<<|\n\n");
-			del();
+		case 1:// 增加用户信息
+			Add_Printf();
+			Add_menu();
 			break;
-		case 3:
-			system("cls");
-			printf("\n\t\t|>>>                编辑文章               <<<|\n\n");
-			Edit();
+		case 2:// 删除用户信息
+			Delete_Printf(&list);
 			break;
-		case 4:
-			system("cls");
-			printf("\n\t\t|>>>                查找文章               <<<|\n\n");
-			Search();
+		case 3:// 修改用户信息
+			Fix(&list);
 			break;
-		case 5:
-			system("cls");
-			printf("\n\t\t|>>>                保存文章               <<<|\n\n");
-			Save();
+		case 4:// 查询用户信息
+			Search_Printf(&list);
 			break;
-		case 6:
-			system("cls");
-			printf("\n\t\t|》》》        已退出用户系统！            《《《|\n");
-			Sleep(1500);
-			system("cls");
-			main();
+		case 5:// 输出用户信息
+			Print(&list);
+			break;
+		case 6:// 退出管理系统
+			Quit();
 			break;
 		default:
 			printf("\t\t输入范围错误，请重新输入\n");
 			Sleep(1000);
 			system("cls");
-			usermenu();
-			userchoice();
+			mangermenu();
+			mangerchoice();
 			break;
+		}
 	}
 	return 0;
 }
