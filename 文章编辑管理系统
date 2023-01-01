@@ -498,7 +498,7 @@ int deleteWord()//删除特定字符
 	}
 	return 0;
 }
-
+//移动行调用
 int delete2(int line_num)
 {	
 	LINE * info, *p;
