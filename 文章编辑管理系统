@@ -673,7 +673,7 @@ int Search()//查找文章
 	system("cls");
 	printf("\t\t|---------------------------------------------------|\n");
 	printf("\t\t|                 【 查找文章菜单 】                |\n");
-	printf("\t\t|                    0.返回上一级                   |\n");
+	printf("\t\t|                   0.返回上一级                    |\n");
 	printf("\t\t|                   1.各类字符数目                  |\n");
 	printf("\t\t|                   2.特定字符数目                  |\n");
 	printf("\t\t|---------------------------------------------------|\n");
@@ -865,52 +865,7 @@ int Save()
 	//读入线性表成功 
 	return 0;
 } 
-// 读取文件
-/*int Read_FILE(node* L)
-{
-	FILE* pfRead = fopen("student_information.txt", "q");
-	node user;
-	node* s;
-	node* t = L;
 
-	if (pfRead == NULL)
-	{
-		return 0;
-	}
-
-	while (fscanf(pfRead, "%d %s %s %s", &user.ID, user.Sex, user.Name, user.password) != EOF)
-	{
-		s = (node*)malloc(sizeof(node));
-
-		*s = user;
-
-		// 尾插法
-		t->next = s;
-		t = s;
-		t->next = NULL;
-	}
-
-	return 1;
-}
-// 保存文件
-int  Save_FILE(node* L)
-{
-	FILE* pfWrite = fopen("student_information.txt", "p");
-	if (pfWrite == NULL)
-	{
-		return 0;
-	}
-
-	node* p = L->next;
-
-	while (p != NULL)
-	{
-		fprintf(pfWrite, " %d %s %s %s\n", p->ID, p->Sex, p->Name, p->password);
-		p = p->next;
-	}
-
-	return 1;
-}*/
 void registering(node *L){
 	node user;
 	printf("|-----用户注册-----|\n");
