@@ -1,0 +1,1326 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include<Windows.h>
+
+#define MAX 80
+typedef struct line
+{
+	char str[MAX];      //存储该行的内容 
+	int num;                 //用来记录行号
+	struct line *pre;      //用来指向前一行
+	struct line *next;       //用来指向下一行
+ }LINE;
+LINE *first;          //指向线性表的第一行
+LINE *last;          
+typedef struct Node
+{
+	int ID;// 用户名 
+	char Sex[10];// 性别 
+	int age;//年龄 
+	char Name;// 文章名 
+    char password[10];//密码 
+	struct Node* next;// 指针域
+}node;
+
+node list;// 链表
+void del();
+// 读取文件
+//int Read_FILE(node* L);
+
+// 保存文件
+//int  Save_FILE(node* L);
+
+
+
+// 增加用户信息
+void Add(node *L,node e);
+void Add_Printf();
+
+// 删除用户信息
+void Delete_Printf(node*L);
+void Delete(node* s);
+
+// 修改用户信息
+void Fix(node *L);
+
+
+// 查询用户信息
+void Search_Printf(node* L);
+node* Search_id(int id, node* L);// 按用户名进行查找
+node* Search_name(char name[], node* L);// 按文章名进行查找
+
+// 输出用户信息
+void Print(node* L);
+void Print_Printf();
+
+void Quit();
+void head();
+void Input();
+void Output();
+int Save();
+int Edit();
+int Search();
+void registering(node *L);
+void password_check(node *L); 
+int mangermenu();
+int usermenu();
+int mangerchoice();
+int userchoice();
+int i,j;
+int choice;
+int searchALL();
+int Edit(); 
+void Add_menu();
+int searchString();
+int main()
+{
+	   
+	    node *L;
+		head();
+		printf("\t\t\t\t1.管理员登录\n\n");
+		printf("\t\t\t\t2.用户登录\n\n");
+		printf("\t\t\t\t3.退出系统\n\n");
+		printf("\t请输入你的选择： ");
+		scanf("%d",&choice);
+		system("cls");
+		if(choice==1){
+			while(1){
+			mangermenu();
+			mangerchoice();
+			system("pause");
+			system("cls");
+			}
+		}
+		else if(choice==2){
+			registering(&list);
+		    password_check(&list);
+			while(1){
+			usermenu();
+			userchoice();
+			system("pause");
+			system("cls");
+			}
+		}
+		else{
+			exit(0);
+		}
+}
+int mangermenu()
+{
+	printf("\t\t****************************************************************\n");
+	printf("\t\t***********             管理员功能菜单               ***********\n");
+	printf("\t\t***********          0 ---- 返回登录界面             ***********\n");
+	printf("\t\t***********          1 ---- 增加用户信息             ***********\n");
+	printf("\t\t***********          2 ---- 删除用户信息             ***********\n");
+	printf("\t\t***********          3 ---- 修改用户信息             ***********\n");
+	printf("\t\t***********          4 ---- 查询用户信息             ***********\n");
+	printf("\t\t***********          5 ---- 输出用户信息             ***********\n");
+	printf("\t\t***********          6 ---- 退出管理系统             ***********\n");
+	printf("\t\t****************************************************************\n");
+
+	printf("\t\t请选择想要实现的功能（数字）：");
+	
+	return 0;
+}
+int mangerchoice()
+{
+	int choice;
+	//Read_FILE(&list);
+	while (true)
+	{
+		scanf("%d", &choice);
+		switch (choice)
+		{
+		case 0:// 返回登录界面 
+			system("cls");
+			main(); 
+			break;
+		case 1:// 增加用户信息
+			Add_Printf();
+			Add_menu();
+			break;
+		case 2:// 删除用户信息
+			Delete_Printf(&list);
+			break;
+		case 3:// 修改用户信息
+			Fix(&list);
+			break;
+		case 4:// 查询用户信息
+			Search_Printf(&list);
+			break;
+		case 5:// 输出用户信息
+			Print(&list);
+			break;
+		case 6:// 退出管理系统
+			Quit();
+			break;
+		default:
+			printf("\t\t输入范围错误，请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			mangermenu();
+			mangerchoice();
+			break;
+		}
+	}
+	return 0;
+}
+int userchoice()
+{
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 1:
+			system("cls");
+			printf("\n\t\t|>>>                添加文章               <<<|\n\n");
+			Input();
+			break;
+		case 2:
+			system("cls");
+			printf("\n\t\t|>>>                删除文章               <<<|\n\n");
+			del();
+			break;
+		case 3:
+			system("cls");
+			printf("\n\t\t|>>>                编辑文章               <<<|\n\n");
+			Edit();
+			break;
+		case 4:
+			system("cls");
+			printf("\n\t\t|>>>                查找文章               <<<|\n\n");
+			Search();
+			break;
+		case 5:
+			system("cls");
+			printf("\n\t\t|>>>                保存文章               <<<|\n\n");
+			Save();
+			break;
+		case 6:
+			system("cls");
+			printf("\n\t\t|》》》        已退出用户系统！            《《《|\n");
+			Sleep(1500);
+			system("cls");
+			main();
+			break;
+		default:
+			printf("\t\t输入范围错误，请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			usermenu();
+			userchoice();
+			break;
+	}
+	return 0;
+}
+int usermenu()
+{
+	system("cls");
+	printf("\t\t****************************************************************\n");
+	printf("\t\t***********             用户功能菜单                 ***********\n");
+	printf("\t\t***********          1 ---- 添加文章                 ***********\n");
+	printf("\t\t***********          2 ---- 删除文章                 ***********\n");
+	printf("\t\t***********          3 ---- 编辑文章                 ***********\n");
+	printf("\t\t***********          4 ---- 查找文章                 ***********\n");
+	printf("\t\t***********          5 ---- 保存文章                 ***********\n");
+	printf("\t\t***********          6 ---- 返回登录界面             ***********\n");
+	printf("\t\t****************************************************************\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	return 0;
+}
+void head()
+{
+printf(" \t________________________________________________________\n\n");
+printf(" \t******      welcome to Article editor system      ****** \n");
+printf(" \t******             欢迎使用文章编辑系统           ******  \n");
+printf(" \t________________________________________________________  \n");
+}
+void Input()
+{	
+	LINE *info,*temp;//行指针，info指向当前行，temp指向info的前驱行 
+	char ch;  //ch用于记录输入的字符串 
+	char name[50];//name用于记录文章名字 
+	int linenum,i;//行计数器,i为行字符数组下标 
+	FILE *fp;  //文件指针 
+	temp = NULL; //将temp置空                      
+	first = (LINE*)malloc(sizeof(LINE)); //生成一行的结点空间 
+	info = first;//指向线性表的第一行
+	linenum = 1; //行号初值为1 
+	printf("请输入文章名字："); 
+	scanf("%s",name);
+	printf("请输入文章内容[每行不得超过80个字符(以字符'#'结束)]:\n"); 
+	while((ch = getchar())!='#') //当接收到字符不为'#' 
+	{
+		i = 0;//i为行字符数组下标,初值为0 
+		info->str[i] = ch;//将ch即接收到的字符存储到该行中 
+		i++;//下标加1 
+		while((ch = getchar())!='\n') //从文件中读到一行字符到线性表中 
+		{						      //一行中有多少字符就循环多少次 
+			info->str[i] = ch;
+			i++;
+		}	
+		info->str[i] ='\0';   
+		info->num = linenum++;  //行号存储在线性表中后加一 
+		info->next = (LINE*)malloc(sizeof(LINE));//为下一行生成一行的结点空间 
+		if (i>=80)  
+		{
+			printf("每行最多输出80个字符！\n"); 
+			printf("请重新输入文章！\n");
+			Sleep(5000);  
+			system("cls");
+			Input();
+		}
+		info->pre = temp;
+		temp = info;
+		info = info->next;
+ 	} 
+ 	temp->next = NULL;
+ 	last = temp;
+ 	free(info);
+ 	first->pre = NULL;
+}
+
+void Output()
+{
+	LINE *p = first;
+	while(p != last) //当p所指向的不是最后一行时，循环输出 
+	{
+		printf("\n\n第%d行|%s",p->num,p->str); //输出行号和字符串 
+		p = p->next;//p指向下一行 
+	}
+	printf("\n\n第%d行|%s\n",last->num,last->str); //当p所指向最后一行时，输出最后一行内容 
+	printf("\n");
+}
+int insertLine()//插入一行文本
+{
+	printf("\t\t原文本为：\n");
+	Output();
+	int linenum; 
+	printf("\n\t\t请输入插入位置的行号：");
+	scanf("%d", &linenum);
+	LINE * info, * q, * p;
+	p = first;
+	q = NULL;
+	while (p && p->num != linenum)               
+	{
+		q = p;				//插入行前面一行 
+		p = p->next;	   //插入行后面一行
+	}
+	if (p == NULL && (q->num + 1) != linenum)	//指定行不存在，不能插入
+	{
+		printf("\n\t\t输入的行号不存在！\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 添加字符 】               <<<|\n");
+		insertLine();
+	}
+	else // 指定行存在，进行插入
+	{
+		info = (LINE *)malloc(sizeof(LINE));
+		printf("\t\t请输入要插入的字符串:");
+		scanf("%s", info->str);
+		info->num = linenum;
+		if (linenum == 1)  			  //插入在第一行
+		{
+			info->next = p;
+			p->pre = info;
+			info->pre = NULL;
+			first = info;
+		}
+		else if (q->num != linenum)  //插入在最后一行
+		{
+			q->next = info;
+			info->next = p;
+			info->pre = q;
+		}
+		else     //插入在其他行
+		{
+			q->next = info;
+			info->next = p;
+			p->pre = info;
+			info->pre = q;
+		}
+		while (p)   //如果不是插入在最后一行，插入行后面的行号都加1
+		{
+			p->num = p->num + 1;
+			p = p->next;
+		}
+		printf("\n\t\t|》》》                添加成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 添加字符 】               <<<|\n\n");
+		printf("\t\t添加过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+}
+int insertWord()//添加特定字符
+{
+	printf("\t\t原文本为：\n");
+	Output(); 
+	char string[MAX]; //定义一个字符数组存放插入的字符串 
+	int linenum;  //行号 
+	int position; //列号 
+	printf("\n\t\t请输入插入位置的行号：");
+	scanf("%d", &linenum);
+	printf("\t\t请输入插入位置的列号：");
+	scanf("%d", &position);
+	position = (position*2)-1; 
+	printf("\t\t请输入要插入的字符串：");
+	scanf("%s", string);
+	LINE * info;
+	int len, i;
+	int lenth;
+	char rest_str[MAX],kongge[2] = { " " };
+	info = first;
+	while (info && info->num != linenum)   //查询要插入的行
+	{
+		info = info->next;
+	}
+	if (info == NULL)
+		printf("\n\t\t输入的行号不存在！\n");
+	else if (position < 0)
+		printf("\n\t\t输入的列号不存在！\n");
+	else    //如果行和列都存在，则进行插入
+	{
+		lenth = strlen(info->str);
+		//strlen()作用是计数器，从内存中的某个位置（可以是字符串开头、中间的某个位置、甚至是某个不确定的内存区域）
+		//开始扫描，直到碰到第一个字符串结束符'\0'为止，然后返回计数器值（长度不包括'\0'） 
+		if (lenth < position)	//插入列大于本行文件列数
+		{
+			len = position - lenth - 1;
+			for (i = 0; i < len; i++)
+			strcat(info->str, kongge);   //将空余的部分插入空格符
+			strcat(info->str, string);    //插入字符到列的未尾
+		}
+		else   //插入列在本行文字的中间
+		{
+			strcpy(rest_str, &info->str[position - 1]); //strcpy()字符串复制函数，同时也会复制字符串结束符 
+			strcpy(&info->str[position - 1], string);
+			strcat(info->str, rest_str);  //strcat()作用是在一个字符串末尾增加新的字符：将rest_str字符串拷贝到info->str的字符串末尾，info所指向的字符串要留有足够的空间来容纳要拷贝的字符串 
+		}
+		printf("\n\t\t|》》》                添加成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 添加字符 】               <<<|\n\n");
+		printf("添加过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+} 
+int deleteLine()//删除一行文本
+{
+	printf("\t\t原文本为：\n");
+	Output();
+	printf("\n\t\t请输入要删除行的行号：");
+	int linenum; 
+	scanf("%d",&linenum);
+	LINE * info, *p;
+	info = first;
+	while ((info->num < linenum) && info)  //寻找要删除的行 
+		info = info->next;
+	if (info == NULL)
+		printf("\n\t\t输入的行号不存在\n");
+	else
+	{
+		p = info->next;     //指向要删除的行后面一行 
+		if (first == info) //如果删除的是第一行
+		{
+			first = info->next;
+			if (first)  //如果删除后，不为空
+				first->pre = NULL;
+			else  //删除后为空
+				last = NULL;
+		}
+		else
+		{
+			info->pre->next = info->next;  //指定行的上一行指向指定行的下一行
+			if (info != last) //如果不是最后一行
+				info->next->pre = info->pre;  //修改其下一行的指向头的指针 
+			else  //如果是最后一行，修改尾指针
+				last = info->pre;
+		}
+		free(info);
+		while (p) //被删除行之后的行号减一 
+		{
+			p->num = p->num - 1;
+			p = p->next;
+		}
+		printf("\n\t\t|》》》                删除成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 删除字符 】               <<<|\n\n");
+		printf("\t\t删除过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+}
+int deleteWord()//删除特定字符 
+{
+	int linenum, position,lenth;  //行，列，删除长度 
+	printf("\t\t原文本为：\n");
+	Output();
+	printf("\t\t请输入要删除内容所在行，列，删除内容字节长度，中间用空格隔开\n");
+	scanf("%d %d %d",&linenum,&position,&lenth);
+	position = (position*2)-1;
+	getchar();
+	LINE *info=first;
+	char rest_str[MAX];
+	if(linenum == 1)
+	info = first;
+	else
+	for(int i=1;i<linenum;i++)     	 //让info指向删除内容所在行 
+	info = info->next;      
+	if (info == NULL)
+		printf("\n\t\t该行没有字符！\n");
+	else
+	{
+		if (strlen(info->str) <=(position + lenth))  //本行的字符长度<=待删除的列号+删除长度，直接在当前位置插入'\0'
+			info->str[position] = '\0';
+		else
+		{	int i;
+			for(i = position-1;info->str[i+lenth]!='\0';i++)
+			info->str[i]=info->str[i+lenth];
+			info->str[i]='\0';
+		}
+		printf("\n\t\t|》》》                删除成功！             《《《|\n");
+		Sleep(1000);
+		system("cls");
+		printf("\n\t\t|>>>                【 删除字符 】               <<<|\n\n");
+		printf("\t\t删除过后的文本为：\n"); 
+		Output();
+		printf("\n");
+	}
+	return 0;
+}
+
+int delete2(int line_num)
+{	
+	LINE * info, *p;
+	info = first;
+	while ((info->num < line_num) && info)  //寻找要删除的行 
+		info = info->next;
+	if (info == NULL)
+		printf("该行不存在");
+	else
+	{
+		p = info->next;     //指向要删除的行后面一行 
+		if (first == info) //如果删除的是第一行
+		{
+			first = info->next;
+			if (first)  //如果删除后，不为空
+				first->pre = NULL;
+			else  //删除后为空
+				last = NULL;
+		}
+		else
+		{
+			info->pre->next = info->next;  //指定行的上一行指向指定行的下一行
+			if (info != last) //如果不是最后一行
+				info->next->pre = info->pre;  //修改其下一行的指向头的指针 
+			else  //如果是最后一行，修改尾指针
+				last = info->pre;
+		}
+		free(info);
+		while (p) //被删除行之后的行号减一 
+		{
+			p->num = p->num - 1;
+			p = p->next;
+		}
+
+	}
+return 0;
+}
+
+int menu_move()
+{	
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 移动操作菜单 】                |\n");
+	printf("\t\t|                   1.向下移动一行                  |\n");
+	printf("\t\t|                   2.向上移动一行                  |\n");
+	printf("\t\t|                   3.返回上级菜单                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t原文本为：\n");
+	Output();
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice); 
+	int line_num,number;
+	char str[2];
+	switch (choice)
+			{
+			case 1:   // 向下移动一行
+				printf("\t\t输人要移动的字符串所在行号：");
+				scanf("%d", &line_num);
+				LINE *info,*p;                    //新建一行空行 
+				info = (LINE *)malloc(sizeof(LINE));
+				info->str[0] = ' ';
+				info->str[1] = '\0';
+				info->num = line_num;
+				if (line_num == 1)    //插入在首行
+				{	
+					info->next = first;
+					first->pre = info;
+					first = info;
+					first->pre = NULL;
+					p=first->next;
+				}
+				else  //插入在其他行
+		        {
+		       	p=first;
+		    	while(p->num != line_num)
+					p = p->next;                    //令p指向插入行 
+				info->next=p;
+				info->pre=p->pre;
+				p->pre->next=info;
+				p->pre = info;
+				}
+				while (p)   //插入行后面的行号都加1
+				{
+					p->num = p->num + 1;
+					p = p->next;
+				}
+				printf("\n\t\t|》》》                移动成功！             《《《|\n");
+				Sleep(1000);
+				system("cls");
+				printf("\n\t\t|>>>                【 移动文本 】               <<<|\n\n");
+				printf("\t\t移动过后的文本为：\n"); 
+				Output();
+				printf("\n");
+				break;
+			case 2:   //向上移动一行
+				printf("\t\t输入要移动的字符串所在行号：");
+				scanf("%d",&line_num);
+				delete2(line_num-1);
+				printf("\n\t\t|》》》                移动成功！             《《《|\n");
+				Sleep(1000);
+				system("cls");
+				printf("\n\t\t|>>>                【 移动文本 】               <<<|\n\n");
+				printf("\t\t移动过后的文本为：\n"); 
+				Output();
+				printf("\n");
+				break;
+			
+			case 3: //返回上级菜单
+				system("cls");
+				Edit();
+				break;
+			default:
+				printf("输入错误！请重新输入\n");
+				Sleep(1000);
+				system("cls");
+				menu_move();
+				break;
+				
+			} 
+return 0;
+	
+}
+
+int Edit()
+{
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 编辑文章菜单 】                |\n");
+	printf("\t\t|                   1.删除一行文本                  |\n");
+	printf("\t\t|                   2.删除特定字符                  |\n");
+	printf("\t\t|                   3.添加一行文本                  |\n");
+	printf("\t\t|                   4.添加特定字符                  |\n");
+	printf("\t\t|                   5.移动一行文本                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 0:
+			system("cls");
+			usermenu();
+			userchoice(); 
+			break;
+		case 1:
+			deleteLine();
+			break;
+		case 2:
+			deleteWord();
+			break;
+		case 3:
+			insertLine();
+			break;
+		case 4:
+			insertWord();
+			break;
+		case 5:
+			menu_move();
+			printf("\t\t移动过后的文章为：\n");
+			Output();
+			break;
+		default:
+			printf("输入错误！请重新输入");
+			Sleep(1000);
+			system("cls");
+			Edit();
+			break;
+	}
+	return 0;
+}
+int Search()//查找文章
+{
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 查找文章菜单 】                |\n");
+	printf("\t\t|                    0.返回上一级                   |\n");
+	printf("\t\t|                   1.各类字符数目                  |\n");
+	printf("\t\t|                   2.特定字符数目                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice);
+	switch (choice)
+	{
+		case 0: 
+			system("cls");
+			usermenu();
+			userchoice();
+			break;
+		case 1:
+			searchALL(); 
+			break;
+		case 2:
+			searchString();
+			break;
+		default:
+			printf("输入错误！请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			Search();
+			break;
+	}
+	return 0;
+} 
+int searchALL()
+{
+	int English=0;//英文字母数目 
+	int Blank=0;//空格数目 
+	int Number=0;//数字数目
+	int All=0;//总数目
+	unsigned int i=0;
+	LINE *p = first;
+	//首先输出原文章
+	printf("\n|>>>                【原文章】               <<<|\n");
+	while(p != last) //当p所指向的不是最后一行时，循环输出 
+	{
+		printf("\n\n第%d行%s",p->num,p->str); //输出行号和字符串
+		unsigned int j=0;
+		while(j<strlen(p->str))
+	{
+		if(isdigit(p->str[j]))
+		{
+			Number++;
+		}
+		else if(p->str[j]==32) 
+		{
+			Blank++;
+		}
+		else if(isupper(p->str[j])||islower(p->str[j])) 
+		{
+			English++;
+		}
+			j++;
+	}
+		p = p->next;//p指向下一行 
+	}
+	printf("\n\n第%d行|%s\n",last->num,last->str); //当p所指向最后一行时，输出最后一行内容 
+	while(i<strlen(last->str))
+	{
+		if(isdigit(last->str[i]))
+		{
+			Number++;
+		}
+		else if(last->str[i]==32) 
+		{
+			Blank++;
+		}
+		else if(isupper(last->str[i])||islower(last->str[i])) 
+		{
+			English++;
+		}
+			i++;
+	}
+	All=English+Blank+Number;
+	printf("\n"); 
+	printf("文本中的字母个数为：%d\n",English);
+	printf("文本中的空格个数为：%d\n",Blank);
+	printf("文本中的数字个数为：%d\n",Number);
+	printf("文本中的总字数为：%d\n",All);
+	return 0;
+}
+int searchString()
+{
+	Output();    //首先输出原文章 
+	char key_s[MAX]; //定义一个字符数组用于存放输入的字符串 
+	getchar();
+	printf("\n请输入需要统计数目的字符串：");
+	gets(key_s);   //获得字符串 
+	LINE *info;
+	unsigned int i;
+	int  find_len, found = 0;//found做为if判断条件 
+	char substring[MAX];
+	info = first;
+	int find_num = 0;             //匹配到的次数 
+	find_len = strlen(key_s);//求字符串实际长度 
+	while (info)   //查询
+	{	
+		i = 0;  //行间循环
+		while (i <= (strlen(info->str) - find_len))  //行内查找循环
+		{	int k=0;
+			for(unsigned int j=i;j<i+find_len;j++)   // 行内的字符串从第一个开始按定长find_len赋给substring 
+			{	
+				substring[k] = info->str[j]; 
+				k++;
+			}
+			if (strcmp(substring,key_s) == 0)//比较两个字符串是否相同 
+			{	
+				find_num++;//相同，将匹配次数加1 
+				printf("\n|第%d次出现在：第%d行第%d列\n",find_num,info->num,(i+1+1)/2);
+				found = 1;
+			}
+				i++;
+		}
+		info = info->next;
+	}
+	if (found)  //查找成功
+		printf("\n该字符串出现的总次数为:%d\n",find_num);
+	else   //查找不成功
+		printf("\n|》》》          文本中没有该字符串！         《《《|\n\n");
+	return 0;
+}
+int Save()
+{
+	char  *p,c; 
+	FILE *fp;
+    LINE *info=first;
+	int i=0; 
+    char name[20];//定义一个字符数组用于存放输入的文件路径字符 
+	printf("\n请输入保存地址(例如: c:\\a.txt):");
+	scanf("%s",name);
+	while ((fp=fopen(name,"w"))==NULL)
+	{
+		printf("文件不存在，请重新输入文件名：");
+		scanf("%s",name);
+	} 
+		while(info)
+	{   
+		p=info->str; 
+        while(*p)  
+			putc(*p++, fp);
+		putc('\n', fp); //将'\n'写入指定的fp中，并将位置标识符往前移动 
+		info = info->next;
+	}
+    fclose(fp);
+	printf("\n|》》》                保存成功！             《《《|\n");	
+	
+	LINE *temp;
+	temp=NULL;
+	int inct;
+	if ((fp = fopen(name, "r")) == NULL)
+	{
+		printf("\t文件打不开！\n");
+		exit(0);
+	}
+	
+	first = (LINE*)malloc(sizeof(LINE)); //动态生成一行的结点空间
+	info = first;
+	inct = 1;
+	while ((c = fgetc(fp)) != EOF)
+	{
+		i = 0;
+		info->str[i] = c;
+		i++;
+		while ((c = fgetc(fp)) != '\n')  //从文件中读取一行字符到线性表中，文件中每一行以\n为结束标
+		{
+			info->str[i] = c;
+			i++;
+		}
+		info->str[i] = '\0';  //线性表中每行末尾的结束标志
+		info->num = inct++;  //行号和计数器都加1
+		info->next = (LINE*)malloc(sizeof(LINE)); //为下一行动态生成一行的结点空间
+		if (!info->next)
+		{
+			printf("\n|》》》              内存已经用完！           《《《|\n\n");  
+			exit(0);
+		}
+		info->pre = temp;
+		temp = info;
+		info = info->next;
+	}
+	temp->next = NULL;
+	last = temp;
+	free(info);  //释放节点空间 
+	first->pre = NULL;
+	fclose(fp);
+	//读入线性表成功 
+	return 0;
+} 
+// 读取文件
+/*int Read_FILE(node* L)
+{
+	FILE* pfRead = fopen("student_information.txt", "q");
+	node user;
+	node* s;
+	node* t = L;
+
+	if (pfRead == NULL)
+	{
+		return 0;
+	}
+
+	while (fscanf(pfRead, "%d %s %s %s", &user.ID, user.Sex, user.Name, user.password) != EOF)
+	{
+		s = (node*)malloc(sizeof(node));
+
+		*s = user;
+
+		// 尾插法
+		t->next = s;
+		t = s;
+		t->next = NULL;
+	}
+
+	return 1;
+}
+// 保存文件
+int  Save_FILE(node* L)
+{
+	FILE* pfWrite = fopen("student_information.txt", "p");
+	if (pfWrite == NULL)
+	{
+		return 0;
+	}
+
+	node* p = L->next;
+
+	while (p != NULL)
+	{
+		fprintf(pfWrite, " %d %s %s %s\n", p->ID, p->Sex, p->Name, p->password);
+		p = p->next;
+	}
+
+	return 1;
+}*/
+void registering(node *L){
+	node user;
+	printf("|-----用户注册-----|\n");
+	printf("请输入用户名：");
+	scanf("%d", &user.ID);
+	printf("请输入性别：");
+	scanf("%s", user.Sex);
+	printf("请输入年龄：");
+	scanf("%d",&user.age); 
+	printf("请输入用户密码：");
+	scanf("%s", user.password);
+	Add(&list, user);
+	printf("用户注册成功\n");
+	Sleep(1000);
+} 
+void password_check(node *L){
+	system("cls");
+    node user1;
+    printf("请输入用户名:");
+	scanf("%d",&user1.ID);
+	printf("请输入用户密码:");
+	scanf("%s",user1.password);
+    node* user = Search_id(user1.ID, L);
+	if (user == NULL)
+	{
+	printf("此用户不存在,请重新注册！\n");
+     registering(&list);
+     password_check(&list);
+     usermenu();
+	 userchoice();
+	}
+	user = user->next;
+	if (strcmp(user->password, user1.password) == 0){
+	printf("密码正确，登陆成功！\n");
+	usermenu();
+	userchoice();
+	}
+    else if(strcmp(user->password, user1.password) != 0){
+	printf("密码有误！\n");
+    main();
+   }
+}
+
+void Add_menu()
+{
+	printf("\n\t\t是否继续添加新的用户？\n");
+	printf("\t\t 1->添加新用户\n");
+	printf("\t\t 2->返回上一级\n");
+	printf("请输入："); 
+	scanf("%d",&choice);
+	switch(choice)
+	{
+		case 1:
+			system("cls");
+			Add_Printf();
+			Add_menu();
+			break;
+		case 2:
+			system("cls");
+			mangermenu();
+			mangerchoice();
+			break;
+		default:
+			printf("输入错误！请重新输入");
+			Sleep(1000);
+			system("cls");
+			Add_menu();
+			break;
+	}
+}
+
+// 增加用户信息
+void Add_Printf()
+{
+	system("cls");
+	node user;
+	printf("请输入添加用户的相关信息：\n");
+	printf("用户名：");
+	scanf("%d", &user.ID);
+	printf("性别：");
+	scanf("%s", user.Sex);
+	printf("年龄：");
+	scanf("%d", &user.age);
+	printf("用户添加完成！\n");
+	Add(&list, user);	
+}
+
+void Add(node* L, node e)
+{
+	// 头插法
+	node* p = L;
+	node* s = (node*)malloc(sizeof(node));
+	*s = e;
+
+	s->next = p->next;
+	p->next = s;
+
+	//Save_FILE(L);
+}
+
+// 删除用户信息
+void Delete_Printf(node* L)
+{
+	system("cls");
+	int id;
+
+	node* p;
+
+	printf("请输入要删除的用户的用户名：");
+	scanf("%d", &id);
+	node* user = Search_id(id, L);
+	p = user;
+
+	if (user == NULL)
+	{
+		printf("此用户不存在，稍后返回管理员主菜单\n");
+	}
+	else
+	{ 
+	user = user->next;
+	printf("\t\t该用户如下\n");
+	printf("________________________________________________________________\n");
+	printf("|用户名\t|性别\t|年龄\t|\n");
+	printf("________________________________________________________________\n");
+	printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
+	printf("________________________________________________________________\n");
+	
+	node* t = p->next;
+	p->next = t->next;
+	t->next = NULL;
+	free(t);
+	printf("\n\t\t|》》》             用户删除成功！          《《《|\n");
+	} 
+	Sleep(2000);
+	system("cls"); 
+	mangermenu();
+	mangerchoice();
+	//Delete(p);
+	// 保存信息
+	//Save_FILE(L);
+}
+
+/*void Delete(node* s)
+{
+	node* t = s->next;
+
+	s->next = t->next;
+	t->next = NULL;
+
+	free(t);
+}*/
+
+// 修改用户信息
+void Fix(node* L)
+{
+	system("cls");
+	int id;
+	printf("请输入要修改的用户的用户名：");
+	scanf("%d", &id);
+	node* user = Search_id(id, L);
+
+	if (user == NULL)
+	{
+		printf("此用户不存在,稍后返回管理员菜单\n");
+		Sleep(2000);
+		system("cls"); 
+		mangermenu();
+		mangerchoice();
+	}
+
+	user = user->next;
+	int choice = 0;
+	while (1)
+	{
+		system("cls");
+
+	// 输出一次所要修改的用户信息 
+		printf("________________________________________________________________\n");
+		printf("|用户名\t|性别\t|年龄\t|\n");
+		printf("________________________________________________________________\n");
+		printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
+		printf("________________________________________________________________\n");
+
+		printf("\t\t修改用户名 ---- 1\n");
+		printf("\t\t修改性别 ---- 2\n");
+		printf("\t\t修改年龄 ---- 3\n");
+
+		printf("\t\t请输入要修改的信息：");
+		scanf("%d", &choice);
+
+		switch (choice)
+		{
+		case 1:
+			printf("\t\t请输入用户名："); 
+			scanf("%d",&user->ID);
+			break;
+		case 2:
+			printf("\t\t请输入性别：");
+			scanf("%s", user->Sex);
+			break;
+		case 3:
+			printf("\t\t请输入年龄：");
+			scanf("%d", user->age);
+			break;
+		default:
+			printf("\t\t输入错误！请选择1-3之间的数字\n");
+			break;
+		}
+		printf("\t\t是否继续修改该用户信息？（Yes：1 / No：0）：");
+		scanf("%d", &choice);
+		if (choice == 0)
+		{
+			break;
+		}
+	}	
+	// 修改完成后该用户的信息
+	printf("\n\t\t用户信息修改成功！\n\n");
+	printf("________________________________________________________________\n");
+	printf("|用户名\t|性别\t|年龄\t|\n");
+	printf("________________________________________________________________\n");
+	printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
+	printf("________________________________________________________________\n\n");
+	printf("\t\t稍后返回管理员主菜单.......\n"); 
+	Sleep(3000);
+	system("cls"); 
+	mangermenu();
+	mangerchoice();
+}
+
+// 查询用户信息
+void Search_Printf(node* L)
+{
+	system("cls");
+	//int choice = 0;
+	//printf("按照用户名查询 \n");
+	//printf("按照文章名查询 ---- 2\n");
+	/*printf("请输入查询方式：");
+	scanf("%d", &choice);
+
+	int id;
+	char name[50];
+	node* user;
+	if (choice == 1)
+	{*/
+		node* user;
+		int id;
+		printf("\t\t请输入要查询的用户名：");
+		scanf("%d", &id);
+		user = Search_id(id, L);
+
+		if (user == NULL)
+		{
+			printf("\t\t此用户不存在！请重新输入\n");
+			Sleep(2000);
+			Search_Printf(&list);
+		}
+		else
+		{
+		user = user->next;
+			printf("\t\t此用户已找到\n\n");
+			printf("________________________________________________________________\n");
+			printf("|用户名\t|性别\t|年龄\t|\n");
+			printf("________________________________________________________________\n");
+			printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
+			printf("________________________________________________________________\n");
+		}
+		while(1)
+		{
+			printf("\n1.继续查询用户\n");
+			printf("\n2.返回管理员主菜单\n");
+			scanf("%d",&choice);
+			if(choice==1)
+			{
+				Search_Printf(&list);	
+			}
+			else if(choice==2)
+			{
+				break;
+			}
+			else
+				printf("\t\t输入范围错误，请重新输入\n");
+		}
+		
+		system("cls");
+		mangermenu();
+		mangerchoice();
+}
+	/*else if (choice == 2)
+	{
+		printf("请输入要查询的文章名：");
+		scanf("%s", name);
+		user = Search_name(name, L);
+
+		if (user == NULL)
+		{
+			printf("此用户不存在！\n");
+		}
+		else
+		{
+			user = user->next;
+			printf("________________________________________________________________\n");
+			printf("|用户名\t|性别\t|文章名\t|\n");
+			printf("________________________________________________________________\n");
+			printf("|%d\t|%s\t|%s\t|\n", user->ID, user->Sex, user->Name);
+			printf("________________________________________________________________\n");
+		}
+	}
+}*/
+
+// 按用户名进行查找
+node* Search_id(int id, node* L)
+{
+	node* p = L;
+	
+	while (p->next != NULL)
+	{
+		if (p->next->ID == id)
+		{
+			return p;
+		}
+		p = p->next;
+	}
+	return NULL;
+}
+
+// 按文章名进行查找
+/*node* Search_name(char name[], node* L)
+{
+	node* p = L;
+
+	while (p->next != NULL)
+	{
+		if (strcmp(name, p->next->Name) == 0)
+		{
+			return p;
+		}
+		p = p->next;
+	}
+	return NULL;
+}*/
+void del()
+{
+	LINE *info,*temp;//行指针，info指向当前行，temp指向info的前驱行 
+	char ch=' ';  //ch用于记录输入的字符串 
+	int linenum,i;//行计数器,i为行字符数组下标 
+	//FILE *fp;  //文件指针 
+	temp = NULL; //将temp置空                      
+	first = (LINE*)malloc(sizeof(LINE)); //生成一行的结点空间 
+	info = first;//指向线性表的第一行
+	linenum = 1; //行号初值为1 
+	printf("\n\t\t|》》》                删除成功！             《《《|\n");
+		i = 0;//i为行字符数组下标,初值为0 
+		info->str[i] = ch;//将ch即接收到的字符存储到该行中 
+		i++;//下标加1 	
+		info->str[i] ='\0';   
+		info->num = linenum++;  //行号存储在线性表中后加一 
+		info->next = (LINE*)malloc(sizeof(LINE));//为下一行生成一行的结点空间 
+		info->pre = temp;
+		temp = info;
+		info = info->next;
+ 	
+ 	temp->next = NULL;
+ 	last = temp;
+ 	free(info);
+ 	first->pre = NULL;
+}
+// 输出用户信息
+void Print(node* L)
+{
+	system("cls");
+	node* p = L->next;
+	//Print_Printf();
+	printf("________________________________________________________________\n");
+	printf("|用户名\t|性别\t|年龄\t|\n");
+	printf("________________________________________________________________\n");
+	if (p != NULL)
+	{
+		while (p != NULL)
+		{
+			printf("________________________________________________________________\n");
+			printf("|%d\t|%s\t|%d\t|\n", p->ID, p->Sex, p->age);
+			printf("________________________________________________________________\n");
+			p = p->next;
+		}
+	}
+	printf("输入1返回管理员主菜单：");
+	scanf("%d",&choice);
+	if(choice==1)
+	{
+		system("cls");
+		mangermenu();
+		mangerchoice();
+	}
+	else
+	{
+		printf("请输入正确的数字！"); 
+		Sleep(1500);
+		Print(&list);
+	}
+}
+
+/*void Print_Printf()
+{
+	printf("________________________________________________________________\n");
+	printf("|用户名\t|性别\t|年龄\t|\n");
+	printf("________________________________________________________________\n");
+}*/
+void Quit()
+{
+	system("cls");
+	printf("\n\t\t|》》》        已退出用户信息管理系统！            《《《|\n");
+	Sleep(1500);
+	system("cls");
+	main();
+}
