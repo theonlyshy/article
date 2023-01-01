@@ -1008,16 +1008,6 @@ void Delete_Printf(node* L)
 	//Save_FILE(L);
 }
 
-/*void Delete(node* s)
-{
-	node* t = s->next;
-
-	s->next = t->next;
-	t->next = NULL;
-
-	free(t);
-}*/
-
 // 修改用户信息
 void Fix(node* L)
 {
