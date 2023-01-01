@@ -1,0 +1,75 @@
+void Fix(node* L)
+{
+	system("cls");
+	int id;
+	printf("请输入要修改的用户的用户名：");
+	scanf("%d", &id);
+	node* user = Search_id(id, L);
+
+	if (user == NULL)
+	{
+		printf("此用户不存在,稍后返回管理员菜单\n");
+		Sleep(2000);
+		system("cls"); 
+		mangermenu();
+		mangerchoice();
+	}
+
+	user = user->next;
+	int choice = 0;
+	while (1)
+	{
+		system("cls");
+
+	// 输出一次所要修改的用户信息 
+		printf("________________________________________________________________\n");
+		printf("|用户名\t|性别\t|年龄\t|\n");
+		printf("________________________________________________________________\n");
+		printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
+		printf("________________________________________________________________\n");
+
+		printf("\t\t修改用户名 ---- 1\n");
+		printf("\t\t修改性别 ---- 2\n");
+		printf("\t\t修改年龄 ---- 3\n");
+
+		printf("\t\t请输入要修改的信息：");
+		scanf("%d", &choice);
+
+		switch (choice)
+		{
+		case 1:
+			printf("\t\t请输入用户名："); 
+			scanf("%d",&user->ID);
+			break;
+		case 2:
+			printf("\t\t请输入性别：");
+			scanf("%s", user->Sex);
+			break;
+		case 3:
+			printf("\t\t请输入年龄：");
+			scanf("%d",&user->age);
+			break;
+		default:
+			printf("\t\t输入错误！请选择1-3之间的数字\n");
+			break;
+		}
+		printf("\t\t是否继续修改该用户信息？（Yes：1 / No：0）：");
+		scanf("%d", &choice);
+		if (choice == 0)
+		{
+			break;
+		}
+	}	
+	// 修改完成后该用户的信息
+	printf("\n\t\t用户信息修改成功！\n\n");
+	printf("________________________________________________________________\n");
+	printf("|用户名\t|性别\t|年龄\t|\n");
+	printf("________________________________________________________________\n");
+	printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
+	printf("________________________________________________________________\n\n");
+	printf("\t\t稍后返回管理员主菜单.......\n"); 
+	Sleep(3000);
+	system("cls"); 
+	mangermenu();
+	mangerchoice();
+}
