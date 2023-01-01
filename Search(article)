@@ -1,0 +1,33 @@
+int Search()//查找文章
+{
+	system("cls");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t|                 【 查找文章菜单 】                |\n");
+	printf("\t\t|                    0.返回上一级                   |\n");
+	printf("\t\t|                   1.各类字符数目                  |\n");
+	printf("\t\t|                   2.特定字符数目                  |\n");
+	printf("\t\t|---------------------------------------------------|\n");
+	printf("\t\t请选择想要实现的功能（数字）：");
+	scanf("%d",&choice);
+	switch (choice)
+	{
+		case 0: 
+			system("cls");
+			usermenu();
+			userchoice();
+			break;
+		case 1:
+			searchALL(); 
+			break;
+		case 2:
+			searchString();
+			break;
+		default:
+			printf("输入错误！请重新输入\n");
+			Sleep(1000);
+			system("cls");
+			Search();
+			break;
+	}
+	return 0;
+} 
