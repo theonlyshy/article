@@ -1079,20 +1079,20 @@ void Search_Printf(node* L)
 	system("cls");
 	node* user;
 	int id;
-	printf("\t\t请输入要查询的用户名：");
+	printf("请输入要查询的用户名：");
 	scanf("%d", &id);
 	user = Search_id(id, L);
 
 	if (user == NULL)
 	{
-	printf("\t\t此用户不存在！请重新输入\n");
+	printf("此用户不存在！请重新输入\n");
 	Sleep(2000);
 	Search_Printf(&list);
 	}
 	else
 	{
 	user = user->next;
-			printf("\t\t此用户已找到\n\n");
+			printf("此用户已找到\n\n");
 			printf("________________________________________________________________\n");
 			printf("|用户名\t|性别\t|年龄\t|\n");
 			printf("________________________________________________________________\n");
@@ -1201,7 +1201,5 @@ void Quit()
 {
 	system("cls");
 	printf("\n\t\t|》》》        已退出用户信息管理系统！            《《《|\n");
-	Sleep(1500);
-	system("cls");
-	main();
+	exit(0);
 }
