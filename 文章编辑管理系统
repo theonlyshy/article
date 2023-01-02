@@ -1151,22 +1151,6 @@ node* Search_id(int id, node* L)
 	}
 	return NULL;
 }
-
-// 按文章名进行查找
-/*node* Search_name(char name[], node* L)
-{
-	node* p = L;
-
-	while (p->next != NULL)
-	{
-		if (strcmp(name, p->next->Name) == 0)
-		{
-			return p;
-		}
-		p = p->next;
-	}
-	return NULL;
-}*/
 void del()
 {
 	LINE *info,*temp;//行指针，info指向当前行，temp指向info的前驱行 
