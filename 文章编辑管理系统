@@ -857,7 +857,7 @@ int Save()
 	//读入线性表成功 
 	return 0;
 } 
-
+//注册界面
 void registering(node *L){
 	node user;
 	printf("|-----用户注册-----|\n");
@@ -873,6 +873,7 @@ void registering(node *L){
 	printf("用户注册成功\n");
 	Sleep(1000);
 } 
+//密码登录识别
 void password_check(node *L){
 	system("cls");
     node user1;
