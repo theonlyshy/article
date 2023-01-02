@@ -39,7 +39,6 @@ void Fix(node *L);
 // 查询用户信息
 void Search_Printf(node* L);
 node* Search_id(int id, node* L);// 按用户名进行查找
-node* Search_name(char name[], node* L);// 按文章名进行查找
 
 // 输出用户信息
 void Print(node* L);
@@ -954,8 +953,6 @@ void Add(node* L, node e)
 
 	s->next = p->next;
 	p->next = s;
-
-	//Save_FILE(L);
 }
 
 // 删除用户信息
@@ -995,9 +992,8 @@ void Delete_Printf(node* L)
 	system("cls"); 
 	mangermenu();
 	mangerchoice();
-	//Delete(p);
-	// 保存信息
-	//Save_FILE(L);
+	
+
 }
 
 // 修改用户信息
