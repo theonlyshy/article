@@ -18,7 +18,6 @@ typedef struct Node
 	int ID;// 用户名 
 	char Sex[10];// 性别 
 	int age;//年龄 
-	char Name;// 文章名 
     char password[10];//密码 
 	struct Node* next;// 指针域
 }node;
