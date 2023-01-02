@@ -1082,39 +1082,28 @@ void Fix(node* L)
 void Search_Printf(node* L)
 {
 	system("cls");
-	//int choice = 0;
-	//printf("按照用户名查询 \n");
-	//printf("按照文章名查询 ---- 2\n");
-	/*printf("请输入查询方式：");
-	scanf("%d", &choice);
-
-	int id;
-	char name[50];
 	node* user;
-	if (choice == 1)
-	{*/
-		node* user;
-		int id;
-		printf("\t\t请输入要查询的用户名：");
-		scanf("%d", &id);
-		user = Search_id(id, L);
+	int id;
+	printf("\t\t请输入要查询的用户名：");
+	scanf("%d", &id);
+	user = Search_id(id, L);
 
-		if (user == NULL)
-		{
-			printf("\t\t此用户不存在！请重新输入\n");
-			Sleep(2000);
-			Search_Printf(&list);
-		}
-		else
-		{
-		user = user->next;
+	if (user == NULL)
+	{
+	printf("\t\t此用户不存在！请重新输入\n");
+	Sleep(2000);
+	Search_Printf(&list);
+	}
+	else
+	{
+	user = user->next;
 			printf("\t\t此用户已找到\n\n");
 			printf("________________________________________________________________\n");
 			printf("|用户名\t|性别\t|年龄\t|\n");
 			printf("________________________________________________________________\n");
 			printf("|%d\t|%s\t|%d\t|\n", user->ID, user->Sex, user->age);
 			printf("________________________________________________________________\n");
-		}
+	}
 		while(1)
 		{
 			printf("\n1.继续查询用户\n");
