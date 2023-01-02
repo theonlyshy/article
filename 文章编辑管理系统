@@ -25,14 +25,6 @@ typedef struct Node
 
 node list;// 链表
 void del();
-// 读取文件
-//int Read_FILE(node* L);
-
-// 保存文件
-//int  Save_FILE(node* L);
-
-
-
 // 增加用户信息
 void Add(node *L,node e);
 void Add_Printf();
