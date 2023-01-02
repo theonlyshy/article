@@ -1211,6 +1211,7 @@ void Print(node* L)
 		Print(&list);
 	}
 }
+//退出系统
 void Quit()
 {
 	system("cls");
